@@ -1,0 +1,24 @@
+name: Cppcheck CI Pipeline
+
+# Bu otomasyon ne zaman tetiklensin? (Trigger)
+on: 
+  push:
+    branches: [ "main" ]
+
+jobs:
+  static-analysis:
+    # GitHub'dan bize Ubuntu kurulu sanal bir bilgisayar (Runner) vermesini istiyoruz
+    runs-on: ubuntu-latest 
+
+    steps:
+    # 1. Adım: Kodumuzu bu sanal bilgisayara indir (Checkout)
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Adım: Sanal bilgisayara Cppcheck kur (Install)
+    - name: Install Cppcheck
+      run: sudo apt-get update && sudo apt-get install -y cppcheck
+
+    # 3. Adım: Kodumuzu analiz et (Analyze)
+    - name: Run Static Code Analysis
+      run: cppcheck --enable=all --error-exitcode=1 main.c
